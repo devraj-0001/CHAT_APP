@@ -33,6 +33,21 @@ io.on("connection", (socket) => {
     delete userSocketMap[userId];
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });
+
+  // socket.on("typing", (data) => {
+  //   socket.broadcast.emit("typing", data);
+  //   console.log(data);
+  // });
+
+  socket.on("typing", (data) => {
+    // forward only to receiver
+    io.to(userSocketMap[data.receiverId]).emit("typing", data);
+  });
+
+  // socket.on("dummy", (data) => {
+  //   console.log("SenderId: ", data.senderId);
+  //   console.log("RecieverId: ", data.recieverId);
+  // });
 });
 
 export { io, app, server };
